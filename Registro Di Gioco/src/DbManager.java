@@ -18,7 +18,7 @@ public class DbManager {
     }
     
     //02
-    public static ObservableList<Player> caricaListaPlayer(String date, int num){
+    public ObservableList<Player> caricaListaPlayer(String date, int num){
         playerList = FXCollections.observableArrayList();
         try(
             PreparedStatement ps = connessioneDB.prepareStatement("SELECT usernameID, faction, class, level, rating, matches from playertab WHERE lastPlayed >= '"+date+"' ORDER BY rating DESC LIMIT "+num+";");
@@ -35,7 +35,7 @@ public class DbManager {
     }
     
     //03
-    public static ObservableList<PieChart.Data> caricaPlayerStats(String date, int num){
+    public ObservableList<PieChart.Data> caricaPlayerStats(String date, int num){
         ObservableList<PieChart.Data> topPlayedData = FXCollections.observableArrayList();
         try(
             PreparedStatement ps = connessioneDB.prepareStatement("SELECT usernameID, matches WHERE lastPlayed >='"+date+"' ORDER BY rating DESC LIMIT "+num+";");

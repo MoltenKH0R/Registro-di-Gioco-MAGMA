@@ -1,0 +1,23 @@
+<ConfigurazioneXML>
+  <confStyle>
+    <dimFontNormal>12</dimFontNormal>
+    <dimFontLabel>18</dimFontLabel>
+    <font>Helvetica</font>
+    <fontWeight>bold</fontWeight>
+    <backgroundColor>#AAA</backgroundColor>
+  </confStyle>
+  <confDB>
+    <ip>127.0.0.1</ip>
+    <port>3306</port>
+  </confDB>
+  <confServer>
+    <ip>127.0.0.1</ip>
+    <port>8080</port>
+  </confServer>
+  <confNum>
+    <num>10</num>
+  </confNum>
+  <confDate>
+    <date>2017-01-01</date>
+  </confDate>
+</ConfigurazioneXML>

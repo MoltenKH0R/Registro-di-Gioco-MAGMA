@@ -6,10 +6,10 @@ import java.io.*;
 public class CacheBinaria implements Serializable {
     public String username;
     public String itemName;
-    public int itemItemLevel;
-    public int itemLevelRequired;
+    public String itemItemLevel;
+    public String itemLevelRequired;
     
-    public CacheBinaria(String u, String in, int il, int lr){
+    public CacheBinaria(String u, String in, String il, String lr){
         username = u;
         itemName = in;
         itemItemLevel = il;

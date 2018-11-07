@@ -16,18 +16,18 @@ public class ConfigurazioneXML {
     }
     
     class ConfigurazioneStyleXML{
-        int sectionDimFont;
-        int labelDimFont;
+        int dimFontNormal;
+        int dimFontLabel;
         String font;
         String fontWeight;
-        String background;
+        String backgroundColor;
         
         public ConfigurazioneStyleXML(int sdf, int ldf, String f, String fw, String bg){
-            sectionDimFont = sdf;
-            labelDimFont = ldf;
+            dimFontNormal = sdf;
+            dimFontLabel = ldf;
             font = f;
             fontWeight = fw;
-            background = bg;
+            backgroundColor = bg;
         }
     }
 

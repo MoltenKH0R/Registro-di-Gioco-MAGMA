@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+<xsd:element name="ConfigurazioneXML">
+  <xsd:complexType>
+    <xsd:sequence>
+      <xsd:element name="confStyle" type="ConfigurazioneStyleXML"/>
+      <xsd:element name="confDB" type="configurazioneDBXML"/>
+      <xsd:element name="confServer" type="ConfigurazioneServerXML"/>
+      <xsd:element name="confNum" type="ConfigurazioneNumXML"/>
+      <xsd:element name="confDate" type="ConfigurazioneDateXML"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:element>
+
+<xsd:complexType name="ConfigurazioneStyleXML">
+<xsd:sequence>
+  <xsd:element name="dimFontNormal" type="xsd:integer"/>
+  <xsd:element name="dimFontLabel" type="xsd:integer"/>
+  <xsd:element name="font" type="xsd:string"/>
+  <xsd:element name="fontWeight" type="xsd:string"/>
+  <xsd:element name="backgroundColor" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+
+<xsd:complexType name="configurazioneDBXML">
+<xsd:sequence>
+    <xsd:element name="ip" type="xsd:string"/>
+    <xsd:element name="port" type="xsd:integer"/>
+</xsd:sequence>
+</xsd:complexType>
+
+<xsd:complexType name="ConfigurazioneServerXML">
+<xsd:sequence>
+  <xsd:element name="ip" type="xsd:string"/>
+  <xsd:element name="port" type="xsd:integer"/>
+</xsd:sequence>
+</xsd:complexType>
+
+<xsd:complexType name="ConfigurazioneNumXML">
+<xsd:sequence>
+    <xsd:element name="num" type="xsd:integer"/>
+</xsd:sequence>
+</xsd:complexType>
+
+<xsd:complexType name="ConfigurazioneDateXML">
+<xsd:sequence>
+  <xsd:element name="date" type="xsd:string"/>
+</xsd:sequence>
+</xsd:complexType>
+
+</xsd:schema>
+
+
+
+
+<!-- Used for documentation:
+
+-->
