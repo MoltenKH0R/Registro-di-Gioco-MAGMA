@@ -1,9 +1,11 @@
 import com.thoughtworks.xstream.*;
 import javafx.scene.paint.*;
 import java.io.*;
+import static java.lang.Integer.parseInt;
 import java.net.*;
 import java.nio.file.*;
 import java.sql.*;
+import java.util.Collections;
 import javafx.application.*;
 import javafx.collections.*;
 import javafx.event.*;
@@ -20,6 +22,7 @@ import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
 import javax.xml.validation.*;
 import org.w3c.dom.Document;
+
 
 public class RegistroDiGioco extends Application {
     private ObservableList<Player> playerList;
@@ -49,22 +52,30 @@ public class RegistroDiGioco extends Application {
     @Override
     public void start(Stage primaryStage) {
        deserializeXML();
+       
        db = new DbManager(configurazione.confDB.ip, configurazione.confDB.port); 
        
-      
-       
        playerTable = new RankTable();
-       
-       
-       
+       playerTable.updateTableList(db.caricaListaPlayer(configurazione.confDate.date, configurazione.confNum.num));
+        
+        grafico = new PieChart(db.caricaPlayerStats(configurazione.confDate.date, configurazione.confNum.num));
+        grafico.setLayoutX(0); grafico.setLayoutY(0);
+        grafico.setLegendSide(Side.RIGHT);
+        
+      
+        
+        
        
        
         //simple separator line
         Separator separator = new Separator();
         separator.setPrefWidth(1150);
         separator.setLayoutX(25);separator.setLayoutY(450);
-       //do stuff
-       //
+        
+
+
+        //do stuff
+        //
         //Left interface section
         //
         
@@ -191,11 +202,23 @@ public class RegistroDiGioco extends Application {
         playBt = new Button("Play");
         playBt.setPrefWidth(100);
         playBt.setLayoutX(950);playBt.setLayoutY(605);
+        
+        
+        
+        createItemBt.setOnAction((ActionEvent e) -> { 
+            Item oggetto = new Item(nameTf.getText(), itemCategoryCb.getValue() , parseInt(itemLevelTf.getText()), parseInt(levelRequiredTf.getText()));
+           if ( db.inviaItem(oggetto) == 1){
+               nameTf.clear();
+               itemCategoryCb.setValue("Category");
+               itemLevelTf.clear();
+               levelRequiredTf.clear();
+           }
+        });
        
        
         Group itemBox = new Group(itemLabel, nameTf, itemCategoryCb, itemLevelTf, levelRequiredTf, separator, createItemBt,
                                     userStatLabel, healthPowerLabel, attackPowerLabel, defenceRatingLabel, criticalStrikeLabel,
-                                    healthPowertf, attackPowertf, defenceRatingtf, criticalStriketf, usernameTf, playBt, playerTable);
+                                    healthPowertf, attackPowertf, defenceRatingtf, criticalStriketf, usernameTf, playBt, playerTable, grafico);
        
        
         
@@ -257,6 +280,13 @@ public class RegistroDiGioco extends Application {
             oggettoScritto.writeObject(cache);
         }catch(IOException ioe){ System.out.println(ioe.getMessage());}
     }
+    
+    private void setupTable(){
+       
+    
+    }
+    
+ 
 }
 
 

@@ -5,14 +5,13 @@ import javafx.scene.chart.*;
 //01
 public class DbManager {
     private static Connection connessioneDB;
-    private static Statement statementCaricamento;
+    
     private static ObservableList<Player> playerList;
     private static ObservableList<Item> itemList;
 
     public DbManager(String ip, int port){
         try{
-            connessioneDB = DriverManager.getConnection("jdb:mysql://"+ip+":"+port+"", "root", "");
-            statementCaricamento = connessioneDB.createStatement();
+            connessioneDB = DriverManager.getConnection("jdbc:mysql://"+ip+":"+port+"/magmadb", "root", "");
         }
         catch(SQLException e){System.err.println(e.getMessage());}
     }
@@ -29,7 +28,7 @@ public class DbManager {
             while (rs.next()){
                 playerList.add(new Player(rs.getString("usernameID"), rs.getString("faction"), rs.getString("class"), rs.getInt("level"), rs.getInt("rating"), rs.getInt("matches")));
             }
-        }catch(SQLException e) {System.err.println(e.getMessage());}
+        }catch(SQLException e) {System.err.println("Errore SQL playerList: "+e.getMessage());}
         
         return playerList;
     }
@@ -38,20 +37,20 @@ public class DbManager {
     public ObservableList<PieChart.Data> caricaPlayerStats(String date, int num){
         ObservableList<PieChart.Data> topPlayedData = FXCollections.observableArrayList();
         try(
-            PreparedStatement ps = connessioneDB.prepareStatement("SELECT usernameID, matches WHERE lastPlayed >='"+date+"' ORDER BY rating DESC LIMIT "+num+";");
+            PreparedStatement ps = connessioneDB.prepareStatement("SELECT usernameID, matches FROM playertab WHERE lastPlayed >= '"+date+"' ORDER BY rating DESC LIMIT "+num+";");
             )
         {
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
                 topPlayedData.add(new PieChart.Data(rs.getString("usernameID"), rs.getInt("matches")));
             }
-        }catch(SQLException e) {System.err.println(e.getMessage());}
+        }catch(SQLException e) {System.err.println("Errore SQL playerStat: "+e.getMessage());}
         
         return topPlayedData;
     } 
     
     //04
-    public static void inviaItem(Item armor){
+    public int inviaItem(Item armor){
         try(
             PreparedStatement ps = connessioneDB.prepareStatement("INSERT INTO itemtab (name, category, itemLevel, levelRequired) VALUES (?,?,?,?);");
             ){
@@ -59,8 +58,9 @@ public class DbManager {
                 ps.setString(2, armor.getCategory());
                 ps.setInt(3, armor.getItemLevel());
                 ps.setInt(4, armor.getLevelRequired());
-                System.out.println("rows affected: " + ps.executeUpdate());
+                return  ps.executeUpdate();
             }catch(SQLException e) {System.err.println(e.getMessage());}
+        return 0;
     }
 }
 
