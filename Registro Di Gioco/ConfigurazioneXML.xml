@@ -4,7 +4,7 @@
     <dimFontLabel>18</dimFontLabel>
     <font>Helvetica</font>
     <fontWeight>bold</fontWeight>
-    <backgroundColor>#AAA</backgroundColor>
+    <backgroundColor>Color.DARK_GRAY</backgroundColor>
   </confStyle>
   <confDB>
     <ip>127.0.0.1</ip>

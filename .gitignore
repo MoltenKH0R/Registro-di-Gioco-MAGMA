@@ -10,3 +10,6 @@
 \.idea/vcs\.xml
 
 \.idea/workspace\.xml
+/GameServer/nbproject/private/
+/GameServer/build/
+/GameServer/dist/

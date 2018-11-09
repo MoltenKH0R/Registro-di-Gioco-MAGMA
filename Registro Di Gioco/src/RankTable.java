@@ -8,6 +8,7 @@ public class RankTable extends TableView<Player> {
     private DbManager db;
     private ConfigurazioneXML configurazione;
     
+    //01
     public RankTable(){
         
         TableColumn nameColumn = new TableColumn("Username");
@@ -40,8 +41,17 @@ public class RankTable extends TableView<Player> {
         this.setLayoutY(40);
     }
     
+    //02
     public void updateTableList(List<Player> newList){
        ObservableList<Player> list = FXCollections.observableArrayList (newList);
         setItems(list);
     }
 }
+
+/*
+Note: 
+    [01]: Costruttore della tabella, la tabella risulterà inizialmente vuota.
+    [02]: istruzione invocata per aggiornare il contenuto della tabella con una 
+          lista osservabile ottenuta da una query tramite DbManager.
+
+*/
