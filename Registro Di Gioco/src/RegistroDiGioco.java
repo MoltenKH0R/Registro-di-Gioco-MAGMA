@@ -206,10 +206,7 @@ public class RegistroDiGioco extends Application {
 
     //06
     private void setLayoutParams(){
-        
-        separator.setPrefWidth(1150);
-        separator.setLayoutX(25);separator.setLayoutY(450);
-        
+      
         itemLabel.setPrefWidth(300);
         itemLabel.setLayoutX(175);itemLabel.setLayoutY(485);
         itemLabel.setStyle(titleParams);
@@ -272,7 +269,7 @@ public class RegistroDiGioco extends Application {
         playBt.setPrefWidth(100);
         playBt.setLayoutX(950);playBt.setLayoutY(605);
         
-         
+       
     }
     
     private void sendServerRequest(){
