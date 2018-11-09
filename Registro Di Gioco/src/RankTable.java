@@ -41,7 +41,10 @@ public class RankTable extends TableView<Player> {
         this.setLayoutY(40);
     }
     
+<<<<<<< HEAD
     //02
+=======
+>>>>>>> master
     public void updateTableList(List<Player> newList){
        ObservableList<Player> list = FXCollections.observableArrayList (newList);
         setItems(list);
