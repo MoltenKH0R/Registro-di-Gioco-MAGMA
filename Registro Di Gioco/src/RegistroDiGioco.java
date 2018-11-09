@@ -1,12 +1,6 @@
 import java.io.*;
 import static java.lang.Integer.parseInt;
-<<<<<<< HEAD
-=======
 import java.net.*;
-import java.nio.file.*;
-import java.sql.*;
-import java.util.Collections;
->>>>>>> master
 import javafx.application.*;
 import javafx.collections.*;
 import javafx.event.*;
@@ -16,13 +10,8 @@ import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.*;
-import java.net.*;
 
-<<<<<<< HEAD
 //01
-=======
-
->>>>>>> master
 public class RegistroDiGioco extends Application {
     private ObservableList<Player> playerList;
     private final ObservableList<String> ItemCategoryList = FXCollections.observableArrayList("Helm", "Shoulders", "Shield", "Weapon", "Ring");
@@ -64,7 +53,6 @@ public class RegistroDiGioco extends Application {
     
     //02
     public void start(Stage primaryStage) {
-<<<<<<< HEAD
  
         xmlh = new XmlHandler();
         configurazione = xmlh.executeXmlDeserialize();
@@ -73,8 +61,6 @@ public class RegistroDiGioco extends Application {
        
         playerTable = new RankTable();
         playerTable.updateTableList(db.caricaListaPlayer(configurazione.confDate.date, configurazione.confNum.num));
-=======
-       deserializeXML();
        
        db = new DbManager(configurazione.confDB.ip, configurazione.confDB.port); 
        
@@ -101,7 +87,6 @@ public class RegistroDiGioco extends Application {
         //
         //Left interface section
         //
->>>>>>> master
         
         grafico = new PieChart(db.caricaPlayerStats(configurazione.confDate.date, configurazione.confNum.num));
         grafico.setLayoutX(0); grafico.setLayoutY(0);
@@ -150,16 +135,14 @@ public class RegistroDiGioco extends Application {
         usernameTf = new TextField();
         //Play Button
         playBt = new Button("Play");
-<<<<<<< HEAD
+
         
         //03
-=======
-        playBt.setPrefWidth(100);
-        playBt.setLayoutX(950);playBt.setLayoutY(605);
+
         
         
         
->>>>>>> master
+
         createItemBt.setOnAction((ActionEvent e) -> { 
             Item oggetto = new Item(nameTf.getText(), itemCategoryCb.getValue() , parseInt(itemLevelTf.getText()), parseInt(levelRequiredTf.getText()));
            if ( db.inviaItem(oggetto) == 1){
@@ -169,24 +152,18 @@ public class RegistroDiGioco extends Application {
                levelRequiredTf.clear();
            }
         });
-<<<<<<< HEAD
+
         
         playBt.setOnAction((ActionEvent e) -> {sendServerRequest();});
         
         setLayoutParams();
-        
-        Group itemBox = new Group(itemLabel, nameTf, itemCategoryCb, itemLevelTf, levelRequiredTf, separator, createItemBt,
-                                    userStatLabel, healthPowerLabel, attackPowerLabel, defenceRatingLabel, criticalStrikeLabel,
-                                    healthPowertf, attackPowertf, defenceRatingtf, criticalStriketf, usernameTf, playBt, playerTable, grafico);
-=======
-       
-       
+
         Group itemBox = new Group(itemLabel, nameTf, itemCategoryCb, itemLevelTf, levelRequiredTf, separator, createItemBt,
                                     userStatLabel, healthPowerLabel, attackPowerLabel, defenceRatingLabel, criticalStrikeLabel,
                                     healthPowertf, attackPowertf, defenceRatingtf, criticalStriketf, usernameTf, playBt, playerTable, grafico);
        
        
->>>>>>> master
+
         
        Scene mainScene = new Scene(itemBox, 1200, 780, Color.DARKGRAY);
        primaryStage.setTitle("Registro di Gioco: MAGMA");
@@ -226,7 +203,7 @@ public class RegistroDiGioco extends Application {
         }catch(IOException ioe){ System.out.println(ioe.getMessage());}
     }
     
-<<<<<<< HEAD
+
     //06
     private void setLayoutParams(){
         
@@ -268,15 +245,6 @@ public class RegistroDiGioco extends Application {
 
         defenceRatingLabel.setLayoutX(450);defenceRatingLabel.setLayoutY(625);
         defenceRatingLabel.setStyle(labelParams);
-=======
-    private void setupTable(){
-       
-    
-    }
-    
- 
-}
->>>>>>> master
 
         criticalStrikeLabel.setLayoutX(450);criticalStrikeLabel.setLayoutY(660);
         criticalStrikeLabel.setStyle(labelParams);
@@ -303,6 +271,8 @@ public class RegistroDiGioco extends Application {
         
         playBt.setPrefWidth(100);
         playBt.setLayoutX(950);playBt.setLayoutY(605);
+        
+         
     }
     
     private void sendServerRequest(){
