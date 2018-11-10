@@ -21,29 +21,20 @@ public class RegistroDiGioco extends Application {
     private RankTable playerTable;
     private PieChart grafico;
     
-    private TextField nameTf;
-    private TextField itemLevelTf;
-    private TextField levelRequiredTf;
-    
-    private TextField healthPowertf;
-    private TextField attackPowertf;
-    private TextField defenceRatingtf;
-    private TextField criticalStriketf;
-    
-    private TextField usernameTf;
-    
-    private Button createItemBt;
-    private Button playBt;
-    
+    private TextField nameTf ,itemLevelTf,levelRequiredTf, healthPowertf ,attackPowertf, defenceRatingtf, criticalStriketf, usernameTf;
+
+    private Button createItemBt, playBt;
+
     private XmlHandler xmlh;
     
-    private String labelParams;
-    private String titleParams;
-    
+    private String labelParams, titleParams;
+
+    private Label graphTitle, rankTableTitle;
+
     ComboBox<String> itemCategoryCb;
     
-    
     private Separator separator;
+    
     final Label itemLabel = new Label("ITEM:");
     final Label userStatLabel = new Label("USER STATISTICS:");
     final Label healthPowerLabel = new Label("Health Power:");
@@ -51,120 +42,80 @@ public class RegistroDiGioco extends Application {
     final Label defenceRatingLabel = new Label("Defence Rating:");
     final Label criticalStrikeLabel = new Label("Critical Strike:");
     
+    private Logger logger = new Logger();
+    
     //02
     public void start(Stage primaryStage) {
- 
+        
+        //Instanziamento della classe XmlHandler per la gestione file XML e XSD
         xmlh = new XmlHandler();
+        
+        //creazione della classe configurazione tramite l'esecuzione del parsing da XML
         configurazione = xmlh.executeXmlDeserialize();
-       
+        
+        //Instanziamento del database Manager
         db = new DbManager(configurazione.confDB.ip, configurazione.confDB.port); 
        
+        //Titoli per Grafico e Tabella
+        graphTitle = new Label("Number of Matches from TOP"+configurazione.confNum.num+" Players:");
+        rankTableTitle = new Label("TOP"+configurazione.confNum.num+" Player List:");
+        
+        //TableView instanziata e funzione update per il caricamento dei dati dal database
         playerTable = new RankTable();
         playerTable.updateTableList(db.caricaListaPlayer(configurazione.confDate.date, configurazione.confNum.num));
-       
-       db = new DbManager(configurazione.confDB.ip, configurazione.confDB.port); 
-       
-       playerTable = new RankTable();
-       playerTable.updateTableList(db.caricaListaPlayer(configurazione.confDate.date, configurazione.confNum.num));
         
+        //Instanziamento del grafico, caricamento immediato dei dati dal database manager
         grafico = new PieChart(db.caricaPlayerStats(configurazione.confDate.date, configurazione.confNum.num));
-        grafico.setLayoutX(0); grafico.setLayoutY(0);
-        grafico.setLegendSide(Side.RIGHT);
-        
-      
-        
-        
-       
-       
-        //simple separator line
-        Separator separator = new Separator();
-        separator.setPrefWidth(1150);
-        separator.setLayoutX(25);separator.setLayoutY(450);
-        
 
-
-        //do stuff
-        //
-        //Left interface section
-        //
+        //Semplice linea per separare la parte alta e bassa dell'interfaccia
+        separator = new Separator();
         
-        grafico = new PieChart(db.caricaPlayerStats(configurazione.confDate.date, configurazione.confNum.num));
-        grafico.setLayoutX(0); grafico.setLayoutY(0);
-        grafico.setLegendSide(Side.RIGHT);
-        
+        //Salvataggio locale della configurazione di stile dei titoli e testi normali
         labelParams = "-fx-font-size: "+configurazione.confStyle.dimFontNormal+"; -fx-font-weight: "+configurazione.confStyle.fontWeight+";-fx-font-family: "+configurazione.confStyle.font+";";
         titleParams = "-fx-font-size: "+configurazione.confStyle.dimFontLabel+"; -fx-font-weight: "+configurazione.confStyle.fontWeight+";-fx-font-family: "+configurazione.confStyle.font+";";
-        
-        //simple separator line
-        separator = new Separator();
 
         //------------------------------ITEM SECTION--------------------------//
-        //Item Name Textfield input
-        nameTf = new TextField();
         
-        //DropDown ComboBox Input for category selection, items loaded from the observableList 
+        //Elementi di interfaccia per la sezione invio Item
+        nameTf = new TextField();
+
         itemCategoryCb = new ComboBox(ItemCategoryList);
 
-        //Item Level textfield input
         itemLevelTf = new TextField();
- 
-        //LevelRequired textfield input
+
         levelRequiredTf = new TextField();
 
-        //button for item creation submit
         createItemBt = new Button("Create Item");
 
-        //
         //------------------------CENTRAL INTERFACE ELEMENTS------------------//
         //labels are initialized as final variables in main class
         
-        //healthPower numerical section
+        //elementi di interfaccia per la visualizzazione dei risultati di partita
         healthPowertf = new TextField();
-         //AttackPower numerical section
+
         attackPowertf = new TextField();
-        //DefenceRating numerical section
-        defenceRatingtf = new TextField();
-        //CriticalStrike numerical section
-        criticalStriketf = new TextField();
-       
-        //
-        //---------------------------RIGHT INPUT INTERFACE--------------------//
-        //
         
-        //Username Input Textfield
+        defenceRatingtf = new TextField();
+
+        criticalStriketf = new TextField();
+
+        //---------------------------RIGHT INPUT INTERFACE--------------------//
+        
+        //Elementi di interfaccia per l'invio di una richiesta al server di partita
         usernameTf = new TextField();
-        //Play Button
+
         playBt = new Button("Play");
 
+        createItemBt.setOnAction((ActionEvent e) -> { logger.createLog(); sendDatabaseItem(); });
         
-        //03
-
-        
-        
-        
-
-        createItemBt.setOnAction((ActionEvent e) -> { 
-            Item oggetto = new Item(nameTf.getText(), itemCategoryCb.getValue() , parseInt(itemLevelTf.getText()), parseInt(levelRequiredTf.getText()));
-           if ( db.inviaItem(oggetto) == 1){
-               nameTf.clear();
-               itemCategoryCb.setValue("Category");
-               itemLevelTf.clear();
-               levelRequiredTf.clear();
-           }
-        });
-
-        
-        playBt.setOnAction((ActionEvent e) -> {sendServerRequest();});
+        playBt.setOnAction((ActionEvent e) -> { logger.playLog(); sendServerRequest();});
         
         setLayoutParams();
 
         Group itemBox = new Group(itemLabel, nameTf, itemCategoryCb, itemLevelTf, levelRequiredTf, separator, createItemBt,
                                     userStatLabel, healthPowerLabel, attackPowerLabel, defenceRatingLabel, criticalStrikeLabel,
-                                    healthPowertf, attackPowertf, defenceRatingtf, criticalStriketf, usernameTf, playBt, playerTable, grafico);
-       
-       
+                                    healthPowertf, attackPowertf, defenceRatingtf, criticalStriketf, usernameTf, playBt, playerTable, grafico, graphTitle, rankTableTitle);
 
-        
        Scene mainScene = new Scene(itemBox, 1200, 780, Color.DARKGRAY);
        primaryStage.setTitle("Registro di Gioco: MAGMA");
        primaryStage.setScene(mainScene);
@@ -172,10 +123,9 @@ public class RegistroDiGioco extends Application {
        
        prelevaCacheBinaria();
 
-       primaryStage.setOnCloseRequest(ev ->{salvaCacheBinaria();});
+       primaryStage.setOnCloseRequest(ev ->{salvaCacheBinaria(); logger.closeLog();});
     }
 
-   
     public static void main(String[] args) {
         launch(args);
     }
@@ -190,6 +140,7 @@ public class RegistroDiGioco extends Application {
             nameTf.setText(cache.itemName);
             itemLevelTf.setText(cache.itemItemLevel);
             levelRequiredTf.setText(cache.itemLevelRequired);
+            logger.cacheLoadLog();
         }catch(IOException ioe){System.out.println("ERRORE: "+ ioe.getMessage());}
          catch(ClassNotFoundException cnfe){System.out.println("ERRORE: "+ cnfe.getMessage());}       
     }
@@ -200,9 +151,9 @@ public class RegistroDiGioco extends Application {
             ObjectOutputStream oggettoScritto = new ObjectOutputStream(scriviFile);){
             cache = new CacheBinaria(usernameTf.getText(), nameTf.getText(), itemLevelTf.getText(), levelRequiredTf.getText());
             oggettoScritto.writeObject(cache);
+            logger.cacheSaveLog();
         }catch(IOException ioe){ System.out.println(ioe.getMessage());}
     }
-    
 
     //06
     private void setLayoutParams(){
@@ -269,20 +220,30 @@ public class RegistroDiGioco extends Application {
         playBt.setPrefWidth(100);
         playBt.setLayoutX(950);playBt.setLayoutY(605);
         
+        separator.setPrefWidth(1150);
+        separator.setLayoutX(25);separator.setLayoutY(450);
+        
+        grafico.setLayoutX(0); grafico.setLayoutY(0);
+        grafico.setLegendSide(Side.RIGHT);
+        
+        graphTitle.setLayoutX(40);graphTitle.setLayoutY(10); 
+        graphTitle.setStyle(titleParams);
+        
+        rankTableTitle.setLayoutX(550); rankTableTitle.setLayoutY(10);
+        rankTableTitle.setStyle(titleParams);
+        
        
     }
     
+    //07
     private void sendServerRequest(){
         try(Socket s = new Socket(configurazione.confServer.ip, configurazione.confServer.port);
-                ObjectOutputStream oout = new ObjectOutputStream (s.getOutputStream());
-                ){
-                    oout.writeObject(usernameTf.getText());
-                    System.out.println("server sent");
-                    
-                   
+            ObjectOutputStream oout = new ObjectOutputStream (s.getOutputStream());
+            ){
+                oout.writeObject(usernameTf.getText());    
                 try (ObjectInputStream oin = new ObjectInputStream(s.getInputStream())) {
                     String response[] = (String[]) oin.readObject();
-                    System.out.println("Server answer: "+response[0]);
+                    System.out.println("Server Responded successfuly...");
                     
                     healthPowertf.setText(response[0]);
                     attackPowertf.setText(response[1]);
@@ -291,11 +252,46 @@ public class RegistroDiGioco extends Application {
                     
                     oout.close();
                     oin.close();
-                } 
-                    
-                }catch(Exception err){System.err.println("Errore invio partita"+err.getMessage());}
+                    System.out.println("Server connection terminated...");
+                }         
+            }catch(Exception err){System.err.println("Error "+err.getMessage());}
     }
-   
+    
+    //03
+    private void sendDatabaseItem(){
+         Item oggetto = new Item(nameTf.getText(), itemCategoryCb.getValue() , parseInt(itemLevelTf.getText()), parseInt(levelRequiredTf.getText()));
+           if ( db.inviaItem(oggetto) == 1){
+               nameTf.clear();
+               itemCategoryCb.setValue("Category");
+               itemLevelTf.clear();
+               levelRequiredTf.clear();
+               System.out.println("Item Correctly added to Database");
+           }
+    }
+    
+    //08
+    class Logger{
+       public Logger() {System.out.println("Logger initialized...");}
+       
+       public void playLog(){
+           System.out.println("Play Button triggered...");
+           System.out.println("["+usernameTf.getText()+"] value sent at server on "+configurazione.confServer.ip+" address & "+configurazione.confServer.port+" port.");
+       }
+       public void createLog(){
+           System.out.println("CreateItem Button triggered...");
+           System.out.println("["+nameTf.getText()+"] item sent to "+configurazione.confDB.ip+" address & "+configurazione.confDB.port+" port.");
+       }
+       
+       public void cacheLoadLog(){
+           System.out.println("Cache Successfully loaded from file bin...");
+       }
+       public void cacheSaveLog(){
+           System.out.println("Cache successfully saved.");
+       }
+       public void closeLog(){
+           System.out.println("Closing Request.");
+       }
+    }
 }
    
 /*
@@ -305,7 +301,7 @@ Note:
           anche oggetti TextField e Bottoni sono inizializzati all'inizio.
     [02]: Funziona Start che istanzia TextField, bottoni, la tabella e il grafico.
           Vengono avviate Scene e Stage incorporando tutti gli elementi di interfaccia.
-    [03]: Evento impostato sul bottone createItemBt che invia i valori dei TextField
+    [03]: Funzione impostata sul bottone createItemBt che invia i valori dei TextField
           di interesse Item alla funzione della classe DbManager che elabora una
           query di tipo INSERT. Se la query va a buon fine i TextField sono clearati.
     [04]: Funzione invocata all'avvio che preleva da un file .bin informazioni 
@@ -314,8 +310,16 @@ Note:
     [05]: Funzione invocata durante la chiusura dell'applicativo. Preleva i valori
           dei TextField nella sezione Item e username per poi salvarli su un file 
           di tipo .bin
-    [06]: funzione invocata dopo l'istanziamento di tutti gli elementi grafici,
+    [06]: funzione invocata dopo l'instanziamento di tutti gli elementi grafici,
           raccoglie le istruzioni per settare correttamente le posizioni e caratteristiche
           grafiche degli elementi d'interfaccia.
+    [07]: Funzione impostata sul bottone PlayBt che effettua una connessione socket
+          ad un server con ip e porta presa dalla configurazione, invia il valore
+          del TextField usernameTf e attende la risposta dal server, impostanto
+          il valore dei TextField nella sezione Player Stats con i risultati
+          ricevuti.
+    [08]: semplice classe Logger che comprende metodi per la stampa di messaggi 
+          nel commandLine per tenere traccia delle operazioni effettuate nell'applicativo
+          e del corretto svolgimento dei metodi.
 */
 
