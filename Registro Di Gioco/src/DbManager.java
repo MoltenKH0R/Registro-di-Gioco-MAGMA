@@ -5,7 +5,6 @@ import javafx.scene.chart.*;
 //01
 public class DbManager {
     private static Connection connessioneDB;
-    
     private static ObservableList<Player> playerList;
     private static ObservableList<Item> itemList;
 
@@ -50,14 +49,14 @@ public class DbManager {
     } 
     
     //04
-    public int inviaItem(Item armor){
+    public int inviaItem(Item itemToSend){
         try(
             PreparedStatement ps = connessioneDB.prepareStatement("INSERT INTO itemtab (name, category, itemLevel, levelRequired) VALUES (?,?,?,?);");
             ){
-                ps.setString(1, armor.getName());
-                ps.setString(2, armor.getCategory());
-                ps.setInt(3, armor.getItemLevel());
-                ps.setInt(4, armor.getLevelRequired());
+                ps.setString(1, itemToSend.getName());
+                ps.setString(2, itemToSend.getCategory());
+                ps.setInt(3, itemToSend.getItemLevel());
+                ps.setInt(4, itemToSend.getLevelRequired());
                 return  ps.executeUpdate();
             }catch(SQLException e) {System.err.println(e.getMessage());}
         return 0;

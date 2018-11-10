@@ -8,7 +8,7 @@ import javafx.geometry.*;
 import javafx.scene.*;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
-import javafx.scene.paint.Color;
+import javafx.scene.paint.*;
 import javafx.stage.*;
 
 //01
