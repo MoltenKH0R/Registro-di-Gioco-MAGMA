@@ -15,7 +15,7 @@
     <port>8080</port>
   </confServer>
   <confNum>
-    <num>10</num>
+    <num>15</num>
   </confNum>
   <confDate>
     <date>2017-01-01</date>

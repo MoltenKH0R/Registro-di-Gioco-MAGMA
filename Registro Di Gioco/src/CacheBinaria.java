@@ -1,7 +1,6 @@
 
 import java.io.*;
 
-
 //01
 public class CacheBinaria implements Serializable {
     public String username;

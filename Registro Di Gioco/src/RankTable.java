@@ -5,7 +5,6 @@ import java.util.*;
 
 public class RankTable extends TableView<Player> {
     private ObservableList<Player> list;
-    private DbManager db;
     private ConfigurazioneXML configurazione;
     
     //01
@@ -42,10 +41,9 @@ public class RankTable extends TableView<Player> {
     }
     
     //02
-
-    public void updateTableList(List<Player> newList){
+    public void updateTableList(List newList){
        ObservableList<Player> list = FXCollections.observableArrayList (newList);
-        setItems(list);
+       setItems(list);
     }
 }
 
