@@ -5,7 +5,6 @@ import java.util.*;
 
 public class RankTable extends TableView<Player> {
     private ObservableList<Player> list;
-    private ConfigurazioneXML configurazione;
     
     //01
     public RankTable(){
@@ -42,8 +41,10 @@ public class RankTable extends TableView<Player> {
     
     //02
     public void updateTableList(List newList){
+        try{
        ObservableList<Player> list = FXCollections.observableArrayList (newList);
        setItems(list);
+        }catch(Exception e){System.out.println("Errore importazione lista Player " +e.getMessage());}
     }
 }
 

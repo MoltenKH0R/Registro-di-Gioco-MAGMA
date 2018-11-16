@@ -19,9 +19,9 @@ public class DbManager {
        List playerList = FXCollections.observableArrayList();
         try(
             PreparedStatement ps = connessioneDB.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
             )
         {
-            ResultSet rs = ps.executeQuery();
             while (rs.next()){
               playerList.add(new Player(rs.getString("usernameID"), rs.getString("faction"), rs.getString("class"), rs.getInt("level"), rs.getInt("rating"), rs.getInt("matches")));
             }
@@ -35,9 +35,9 @@ public class DbManager {
         List topPlayedData = FXCollections.observableArrayList();
         try(
             PreparedStatement ps = connessioneDB.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
             )
         {
-            ResultSet rs = ps.executeQuery();
             while(rs.next()){
                 topPlayedData.add(new PieChart.Data(rs.getString("usernameID"), rs.getInt("matches")));
             }

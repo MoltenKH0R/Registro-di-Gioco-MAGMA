@@ -13,34 +13,40 @@ public class Controller {
     private final DbManager db;
     private final XmlHandler xmlh;
     private CacheBinaria cache;
-    
+    public List lista;
+    public ObservableList<PieChart.Data> chartData;
     public Controller(){
         xmlh = new XmlHandler();
         configurazione = xmlh.executeXmlDeserialize();
         db = new DbManager(configurazione.confDB.ip, configurazione.confDB.port);
-      
+        updateTableContent();
+        updateChartData();
+ 
     }
     
     //02
-    public void updateTableContent(RankTable table){
-        List lista;
-        String query = "SELECT usernameID, faction, class, level, rating, matches from playertab WHERE lastPlayed >= '"
+    private void updateTableContent(){
+        try{String query = "SELECT usernameID, faction, class, level, rating, matches from playertab WHERE lastPlayed >= '"
                         +configurazione.confDate.date+"' ORDER BY rating DESC LIMIT "
                         +configurazione.confNum.num+";";
         lista = db.loadPlayerList(query);
-        table.updateTableList(lista);
+        }catch(Exception e){
+            System.out.println("Impossibile caricare Lista player da Database "+ e.getMessage());
+        }
+        
     }
     
     //03
-    public ObservableList<PieChart.Data> getChartData(){
-        ObservableList<PieChart.Data> chartData;
-        String query ="SELECT usernameID, matches FROM playertab WHERE lastPlayed >= '"
+    private void updateChartData(){
+       try{ String query ="SELECT usernameID, matches FROM playertab WHERE lastPlayed >= '"
                      +configurazione.confDate.date+"' ORDER BY rating DESC LIMIT "
                      +configurazione.confNum.num+";" ;
         chartData = FXCollections.observableArrayList(db.loadPlayerStats(query));
-        return chartData;
+       }catch(Exception e){
+           System.out.println("Impossibile caricare dati grafico da Database "+ e.getMessage()); 
+       }
     }
-    
+
     //04
     public int sendDatabaseItem(String name, String category, int itemLevel, int levelRequired){
         String query = "INSERT INTO itemtab (name, category, itemLevel, levelRequired) VALUES ('"+name+"','"+category+"',"+itemLevel+","+levelRequired+");";
@@ -60,9 +66,9 @@ public class Controller {
             nameTf.setText(cache.itemName);
             itemLevelTf.setText(cache.itemItemLevel);
             levelRequiredTf.setText(cache.itemLevelRequired);
+           }catch(IOException ioe){System.out.println("ERRORE caricamento ioe: "+ ioe.getMessage());}
+         catch(ClassNotFoundException cnfe){System.out.println("ERRORE caricamento cnfe: "+ cnfe.getMessage());} 
 
-        }catch(IOException ioe){System.out.println("ERRORE: "+ ioe.getMessage());}
-         catch(ClassNotFoundException cnfe){System.out.println("ERRORE: "+ cnfe.getMessage());}       
     }
     
     //06
@@ -72,6 +78,7 @@ public class Controller {
             cache = new CacheBinaria(usernameTf.getText(), nameTf.getText(), itemLevelTf.getText(), levelRequiredTf.getText());
             oggettoScritto.writeObject(cache);
         }catch(IOException ioe){ System.out.println(ioe.getMessage());}
+         
     }
     
     //07
@@ -104,8 +111,8 @@ Note:
           per la classe principale
     [02]: Il metodo updateTableContent ha lo scopo di richiedere al database una List<Player>
           e inoltrare i dati ad un metodo specifico della classe RankTable
-    [03]: Il metodo getChartData ritorna una ObservableList<PieChart.Data> dopo
-          aver richiesto al database i dati tramite query predefinita
+    [03]: Metodo che invia una query al DbManager per ottenere i dati da mostrare
+          poi nel grafico      
     [04]: Il metodo sendDatabaseItem riceve valori dai TextField della classe RegistroDiGioco
           formula una String per la query e invia alla classe DbManager la query.
           ritorna 1 o 0 a seconda del risultato della query.
@@ -116,4 +123,6 @@ Note:
           cache.bin
     [07]: sendServerRequest inoltra al server una stringa e attende la risposta,
           impostando i valori ricevuti nei TextField interessati.
+
+    
 */

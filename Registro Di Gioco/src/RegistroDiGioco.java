@@ -44,11 +44,11 @@ public class RegistroDiGioco extends Application {
         //classe middleware per RegistroDiGioco
         controller = new Controller();
         //Tabella per la lista giocatori
-        playerTable= new RankTable();
+        playerTable = new RankTable();
         //Metodo per l'aggiornamento della tabella tramite controller
-        controller.updateTableContent(playerTable);
+        playerTable.updateTableList(controller.lista);
         //grafico per la visualizzazione delle partite dei giocatori, dati presi tramite controller
-        pieGraph = new PieChart(controller.getChartData());
+        pieGraph = new PieChart(controller.chartData);
         //semplice linea
         separator = new Separator();
         //due stringhe standard per lo stile dei label in formato normale e titolo
@@ -101,15 +101,16 @@ public class RegistroDiGioco extends Application {
                                     userStatLabel, healthPowerLabel, attackPowerLabel, defenceRatingLabel, criticalStrikeLabel,
                                     healthPowertf, attackPowertf, defenceRatingtf, criticalStriketf, usernameTf, playBt, playerTable, pieGraph, graphTitle, rankTableTitle);
 
-       Scene mainScene = new Scene(itemBox, 1200, 780, Color.DARKGRAY);
-       primaryStage.setTitle("Registro di Gioco: MAGMA");
-       primaryStage.setScene(mainScene);
-       primaryStage.show();
-       
-       //caricamento cache binarya
-       controller.getCacheBinary(usernameTf, nameTf, itemLevelTf, levelRequiredTf);
-       //salvataggio cache binaria alla chiusura
-       primaryStage.setOnCloseRequest(ev ->{controller.saveCacheBinary(usernameTf, nameTf, itemLevelTf, levelRequiredTf); });
+        Scene mainScene = new Scene(itemBox, 1200, 780, Color.DARKGRAY);
+        primaryStage.setTitle("Registro di Gioco: MAGMA");
+        primaryStage.setScene(mainScene);
+        primaryStage.show();
+        
+        //caricamento della cache binaria
+        controller.getCacheBinary(usernameTf,nameTf, itemLevelTf, levelRequiredTf);
+
+        //salvataggio cache binaria alla chiusura
+        primaryStage.setOnCloseRequest(ev ->{controller.saveCacheBinary(usernameTf, nameTf, itemLevelTf, levelRequiredTf); });
     }
     
     public static void main(String[] args) {
@@ -186,6 +187,7 @@ public class RegistroDiGioco extends Application {
         
         pieGraph.setLayoutX(0); pieGraph.setLayoutY(0);
         pieGraph.setLegendSide(Side.RIGHT);
+        
         
         graphTitle.setLayoutX(40);graphTitle.setLayoutY(10); 
         graphTitle.setStyle(titleParams);
